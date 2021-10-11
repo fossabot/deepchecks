@@ -109,6 +109,13 @@ class Dataset(pd.DataFrame):
         """
         return self._features
 
+    def label(self) ->str:
+        """
+        Returns:
+           Label name.
+        """
+        return self._label
+    
     def _get_profile(self):
         profile = ProfileReport(self, title="Dataset Report", explorative=True, minimal=True)
         return profile
