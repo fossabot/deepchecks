@@ -10,23 +10,18 @@ from mlchecks.base import Dataset
 
 @pytest.fixture(scope='session')
 def iris():
-<<<<<<< HEAD
     return load_iris(as_frame=True)
-=======
-    df = load_iris(return_X_y=False, as_frame=True)
-    return pd.concat([df.data, df.target], axis=1)
 
 
 @pytest.fixture(scope='session')
 def iris_dataset(iris):
-    return Dataset(iris)
->>>>>>> a7557b92d8ab56d277d7b369b8150ba2025949c9
+    return Dataset(iris.frame)
 
 
 @pytest.fixture(scope='session')
 def iris_adaboost(iris):
     clf = AdaBoostClassifier()
-    features = iris.drop('target', axis=1)
+    features = iris.frame.drop('target', axis=1)
     target = iris.target
     clf.fit(features, target)
     return clf

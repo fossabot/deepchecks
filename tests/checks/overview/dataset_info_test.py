@@ -24,5 +24,5 @@ def test_dataset_info_object(iris_dataset):
 
 
 def test_dataset_info_dataframe(iris):
-    result = dataset_info(iris)
+    result = dataset_info(iris.frame)
     assert_that(result.value, equal_to((150, 5)))

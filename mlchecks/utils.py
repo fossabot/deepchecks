@@ -28,6 +28,9 @@ def model_type_validation(model: Any):
         raise MLChecksValueError(f'Model must inherit from one of supported models: {SUPPORTED_BASE_MODELS}')
 
 
+def get_plt_base64():
+    return ''
+
 def is_notebook():
     """
     check if we're in an interactive context (Notebook, GUI support) or terminal-based.
