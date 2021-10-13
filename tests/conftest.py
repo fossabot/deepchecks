@@ -3,6 +3,8 @@
 #pylint: disable=redefined-outer-name
 
 import pytest
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.model_selection import train_test_split
 from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
 from sklearn.datasets import load_iris
 import pandas as pd
@@ -42,6 +44,23 @@ def iris_adaboost(iris):
 def iris_labled_dataset(iris):
     """Return t Iris dataset as Dataset object with label."""
     return Dataset(iris, label='target')
+
+
+@pytest.fixture(scope='session')
+def iris_train_val_ds(iris):
+    """Return Iris train and validation as Dataset object."""
+    X = iris.data
+    y = iris.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=55)
+    train_dataset = Dataset(pd.concat([X_train, y_train], axis=1), 
+                features=iris.feature_names,
+                label='target')
+
+    validation_dataset = Dataset(pd.concat([X_test, y_test], axis=1),                    
+                features=iris.feature_names,
+                label='target')
+    
+    return (validation_dataset, train_dataset)
 
 
 @pytest.fixture(scope='session')
