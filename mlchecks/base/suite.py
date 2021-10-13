@@ -49,7 +49,8 @@ class CheckSuite(BaseCheck):
         if check_datasets_policy not in ['both', 'train', 'validation']:
             raise ValueError('check_datasets_policy must be one of ["both", "train", "validation"]')
 
-        results: Dict[str, Union[Dict, List[CheckResult]]] = defaultdict(list)
+        # results: Dict[str, Union[Dict, List[CheckResult]]] = defaultdict(list)
+        results = []
         for check in self.checks:
             check_results = []
             if isinstance(check, TrainValidationBaseCheck):
@@ -69,16 +70,17 @@ class CheckSuite(BaseCheck):
                 suite_res = check.run(model, train_dataset, validation_dataset, check_datasets_policy)
                 if check.name in results:
                     raise MLChecksValueError("Each suite must have a unique name")
-                results[self.name].append(suite_res)
+                results.append(suite_res)
             else:
                 raise TypeError(f'Expected check of type SingleDatasetBaseCheck, CompareDatasetsBaseCheck, '
                                 f'TrainValidationBaseCheck or ModelOnlyBaseCheck. Got  {check.__class__.__name__} '
                                 f'instead')
 
             if len(check_results) > 0:
-                results[self.name].extend(check_results)
+                results.extend(check_results)
 
-        return results
+        text = f'<h2>{self.name}</h2>' + '<br>'.join([c.display['text/html'] for c in results])
+        return CheckResult(check_results, display={'text/html': text})
 
     # def run(self, model=None, train_dataset=None, validation_dataset=None, check_datasets_policy: str = 'validation') \
     #         -> Dict[str, Union[Dict, List[Union[CheckResult, bool]]]]:
