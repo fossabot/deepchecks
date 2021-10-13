@@ -9,6 +9,7 @@ from scipy.stats import wasserstein_distance
 from sklearn.preprocessing import LabelEncoder
 
 from mlchecks import Dataset, CompareDatasetsBaseCheck, CheckResult
+from mlchecks.display import format_check_display
 from mlchecks.utils import MLChecksValueError, get_plt_html_str
 from logging import getLogger
 import matplotlib.pyplot as plt
@@ -185,7 +186,9 @@ def dataset_drift(dataset: Dataset,
                   compared_dataset: Dataset,
                   column_names: Union[List[str], str] = None,
                   over_time: bool = False) -> CheckResult:
+    """Run dataset_drift check.
 
+        """
     if not isinstance(dataset, Dataset):
         raise MLChecksValueError("dataset must be of instance Dataset")
 
@@ -238,7 +241,7 @@ def dataset_drift(dataset: Dataset,
         if drift_df is not None:
             result[col] = drift_df
 
-    return CheckResult(result, {'text/html': '<br>'.join(display_items)})
+    return CheckResult(result, {'text/html': format_check_display('Data Sample Leakage Report', dataset_drift, '<br>'.join(display_items))})
 
 
 class DatasetDrift(CompareDatasetsBaseCheck):
