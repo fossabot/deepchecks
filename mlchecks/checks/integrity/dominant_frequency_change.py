@@ -115,17 +115,24 @@ def dominant_frequency_change(dataset: Dataset, baseline_dataset: Dataset,
 
 class DominantFrequencyChange(CompareDatasetsBaseCheck):
     """Finds dominant frequency change."""
-
-    def run(self, dataset, baseline_dataset) -> CheckResult:
-        """Run dominant_frequency_change_report check.
+    
+    def __init__(self, **params):
+        """Init base check parameters to pass to be used in the implementing check.
 
         Args:
-            train_dataset (Dataset): The training dataset object. Must contain an index.
-            validation_dataset (Dataset): The validation dataset object. Must contain an index.
             p_value_threshold (float = 0.0001): Maximal p-value to pass the statistical test
                                           determining if the value abundance has changed significantly (0-1).
             dominance_ratio (float = 2): Next most abundance value has to be THIS times less than the first (0-inf).
             ratio_change_thres (float = 1.5): The dominant frequency has to change by at least this ratio (0-inf).
+        """
+        super().__init__(**params)
+    
+    def run(self, dataset, baseline_dataset, model = None) -> CheckResult:
+        """Run dominant_frequency_change_report check.
+
+        Args:
+            dataset (Dataset): The dataset object. Must contain an index.
+            baseline_dataset (Dataset): The baseline dataset object. Must contain an index.
         Returns:
             CheckResult: Detects values highly represented in the tested and reference data and checks if their..
                          relative and absolute percentage have increased significantly and makes a report.
